@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BudgetTracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Login / Register Section -->
+    <div id="login" class="login">
+        <div class="auth">
+            <h1>💳 BudgetTracker</h1>
+            <p>Student Personal Budget & Expense Tracking System</p>
+            
+            <div class="tabs">
+                <button onclick="tab(0)">Login</button>
+                <button onclick="tab(1)">Register</button>
+            </div>
+
+            <form id="lf" onsubmit="start(event)">
+                <input id="email" placeholder="Username / Email" required>
+                <input type="password" placeholder="Password" required>
+                <button>Login</button>
+            </form>
+
+            <form id="rf" class="hide" onsubmit="register(event)">
+                <input id="name" placeholder="Full Name" required>
+                <input placeholder="Username" required>
+                <input type="email" placeholder="Email" required>
+                <input type="password" placeholder="Password" required>
+                <button>Register</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App Section -->
+    <div id="app" class="hide">
+        <!-- Sidebar -->
+        <aside>
+            <h2>💳 BudgetTracker</h2>
+            <small>Plan • Track • Save</small>
+            
+            <nav>
+                <button data-p="dashboard">⌂ Dashboard</button>
+                <button data-p="expenses">▤ Expenses</button>
+                <button data-p="income">＋ Income</button>
+                <button data-p="budget">◉ Budget</button>
+                <button data-p="reports">▥ Reports</button>
+                <button data-p="calendar">□ Calendar</button>
+                <button data-p="notifications">🔔 Notifications</button>
+                <button data-p="settings">⚙ Settings</button>
+            </nav>
+
+            <button id="out">↪ Logout</button>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main>
+            <header>
+                <button id="menu">☰</button>
+                <input id="search" placeholder="Search transactions...">
+                <span>👤 <b id="user">Student</b></span>
+            </header>
+
+            <!-- Dashboard Page -->
+            <section id="dashboard" class="page">
+                <div class="hero">
+                    <h1>Hello, <span id="hello">Student</span>! 👋</h1>
+                    <p>Take control of your money. Plan your budget, track expenses, and build a better future.</p>
+                </div>
+
+                <div class="cards">
+                    <div>
+                        ↗
+                        <small>Total Income</small>
+                        <b id="inc">₱0</b>
+                    </div>
+                    <div>
+                        ↘
+                        <small>Total Expenses</small>
+                        <b id="exp">₱0</b>
+                    </div>
+                    <div>
+                        ◉
+                        <small>Remaining Budget</small>
+                        <b id="rem">₱0</b>
+                    </div>
+                    <div>
+                        ▥
+                        <small>Monthly Budget</small>
+                        <b id="bud">₱0</b>
+                    </div>
+                </div>
+
+                <div class="grid">
+                    <article>
+                        <h3>Expense Overview</h3>
+                        <canvas id="pie" width="300" height="220"></canvas>
+                        <div id="legend"></div>
+                    </article>
+
+                    <article>
+                        <h3>Recent Transactions</h3>
+                        <div id="recent"></div>
+                    </article>
+
+                    <article>
+                        <h3>Budget Progress</h3>
+                        <div class="bar">
+                            <i id="bar"></i>
+                        </div>
+                        <p id="pct"></p>
+                    </article>
+
+                    <article>
+                        <h3>Quick Actions</h3>
+                        <div class="quick">
+                            <button onclick="expense()">＋ Add Expense</button>
+                            <button onclick="income()">↗ Add Income</button>
+                            <button onclick="budget()">◉ Set Budget</button>
+                            <button data-p="reports">▥ View Reports</button>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Expenses Page -->
+            <section id="expenses" class="page">
+                <div class="head">
+                    <div>
+                        <h2>Expense Management</h2>
+                        <p>Add, edit, delete, and view expense history.</p>
+                    </div>
+                    <button onclick="expense()">＋ Add Expense</button>
+                </div>
+
+                <div class="controls">
+                    <input id="eq" placeholder="Search expenses...">
+                    <select id="cat">
+                        <option value="">All Categories</option>
+                        <option>Food</option>
+                        <option>Transportation</option>
+                        <option>School</option>
+                        <option>Personal Needs</option>
+                        <option>Entertainment</option>
+                        <option>Others</option>
+                    </select>
+                </div>
+
+                <article>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Category</th>
+                                <th>Amount</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="etable"></tbody>
+                    </table>
+                </article>
+            </section>
+
+            <!-- Income Page -->
+            <section id="income" class="page">
+                <div class="head">
+                    <div>
+                        <h2>Income Management</h2>
+                        <p>Record allowance or other income.</p>
+                    </div>
+                    <button onclick="income()">＋ Add Income</button>
+                </div>
+                <article id="ilist"></article>
+            </section>
+
+            <!-- Budget Page -->
+            <section id="budget" class="page">
+                <div class="head">
+                    <div>
+                        <h2>Budget Management</h2>
+                        <p>Set monthly or weekly budget and monitor spending.</p>
+                    </div>
+                    <button onclick="budget()">＋ Set Budget</button>
+                </div>
+
+                <article>
+                    <h3>Current Monthly Budget</h3>
+                    <h1 id="bb">₱0</h1>
+                    <div class="bar">
+                        <i id="bbbar"></i>
+                    </div>
+                    <p id="bbtext"></p>
+                </article>
+
+                <div id="categories" class="cards"></div>
+            </section>
+
+            <!-- Reports Page -->
+            <section id="reports" class="page">
+                <h2>Reports & Summary</h2>
+                <p>Daily, weekly/monthly summaries and spending by category.</p>
+                <div class="grid">
+                    <article>
+                        <h3>Financial Summary</h3>
+                        <div id="summary"></div>
+                    </article>
+                    <article>
+                        <h3>Spending by Category</h3>
+                        <div id="bars"></div>
+                    </article>
+                </div>
+            </section>
+
+            <!-- Calendar Page -->
+            <section id="calendar" class="page">
+                <h2>Budget Calendar</h2>
+                <article id="cal"></article>
+            </section>
+
+            <!-- Notifications Page -->
+            <section id="notifications" class="page">
+                <h2>Budget Notifications</h2>
+                <div id="notes"></div>
+            </section>
+
+            <!-- Settings Page -->
+            <section id="settings" class="page">
+                <h2>Settings</h2>
+                <article>
+                    <label>Display Name</label>
+                    <input id="setname">
+                    <button onclick="saveName()">Save Changes</button>
+                    <p>Prototype data is saved in your browser using localStorage.</p>
+                </article>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal hide">
+        <div class="modalbox">
+            <button onclick="closeM()">×</button>
+            <h2 id="mt"></h2>
+            <form id="mf"></form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
